@@ -12,8 +12,8 @@ interface ProgressRingProps {
 }
 
 export function ProgressRing({
-    radius = 100,
-    stroke = 6,
+    radius = 110, // Slightly larger
+    stroke = 4,
     progress,
     goal,
     current
@@ -50,9 +50,7 @@ export function ProgressRing({
             </svg>
             <div className={styles.content}>
                 <span className={styles.value}>{current}</span>
-                <span className={styles.sub}>
-                    / {goal} kcal
-                </span>
+                <span className={styles.sub}>{goal} Goal</span>
             </div>
         </div>
     );

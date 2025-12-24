@@ -23,7 +23,7 @@ export function CalorieChart({ data, goal }: Props) {
                         dataKey="date"
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#888888', fontSize: 10 }}
+                        tick={{ fill: '#5C6157', fontSize: 10 }}
                         tickFormatter={(val) => {
                             const d = new Date(val);
                             return isNaN(d.getTime()) ? val : d.toLocaleDateString(undefined, { weekday: 'short' });
@@ -31,13 +31,14 @@ export function CalorieChart({ data, goal }: Props) {
                     />
                     <YAxis hide />
                     <Tooltip
-                        cursor={{ fill: '#F5F2EA' }}
+                        cursor={{ fill: 'rgba(79, 93, 72, 0.05)' }}
                         contentStyle={{
                             borderRadius: 8,
                             border: 'none',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                            boxShadow: '0 4px 12px rgba(79, 93, 72, 0.1)',
                             fontSize: 12,
-                            color: '#333'
+                            color: '#2C3028',
+                            backgroundColor: '#F7F5F0'
                         }}
                         labelStyle={{ display: 'none' }}
                     />
@@ -45,7 +46,7 @@ export function CalorieChart({ data, goal }: Props) {
                         {displayData.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill={entry.total > goal ? '#DDA15E' : '#A5A58D'}
+                                fill={entry.total > goal ? '#C07A55' : '#4F5D48'}
                             />
                         ))}
                     </Bar>

@@ -34,8 +34,8 @@ export async function getProfiles() {
 
 export async function createProfile(name: string) {
     await ensureDbInitialized();
-    // Earth tone avatars
-    const colors = ['#6B705C', '#A5A58D', '#DDA15E', '#BC6C25', '#CB997E', '#ddb892', '#b7b7a4'];
+    // Premium Organic avatars
+    const colors = ['#4F5D48', '#8A9A81', '#C07A55', '#E6C288', '#AAB0A6', '#5C6157', '#8C7662'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     await db.execute({

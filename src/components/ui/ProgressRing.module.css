@@ -7,18 +7,18 @@
 
 .circleBg {
     stroke: var(--bg-tertiary);
-    stroke-width: 6;
-    /* Thinner stroke */
+    stroke-width: 4;
+    /* Even thinner for elegance */
     fill: transparent;
 }
 
 .circleProgress {
     stroke: var(--primary);
-    stroke-width: 6;
-    /* Thinner stroke */
+    stroke-width: 4;
     stroke-linecap: round;
     fill: transparent;
-    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Slower ease */
 }
 
 .content {
@@ -33,18 +33,21 @@
 }
 
 .value {
-    font-size: 2.5rem;
-    font-weight: 600;
+    font-size: 2.75rem;
+    font-weight: 300;
+    /* Lighter weight for modern look */
     color: var(--text-primary);
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
 }
 
 .sub {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--text-muted);
-    font-weight: 400;
-    margin-top: 0.25rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .container {
