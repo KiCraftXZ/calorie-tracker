@@ -1,0 +1,76 @@
+.form {
+    display: flex;
+    gap: 0.875rem;
+    flex-direction: column;
+}
+
+.inputGroup {
+    display: flex;
+    gap: 0.375rem;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.labelIcon {
+    color: var(--text-light);
+}
+
+.input {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    outline: none;
+    transition: all 0.15s ease;
+    width: 100%;
+}
+
+.input::placeholder {
+    color: var(--text-light);
+}
+
+.input:focus {
+    border-color: var(--primary);
+    background: var(--card-bg);
+    box-shadow: 0 0 0 3px var(--primary-subtle);
+}
+
+.button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 0.9375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+.buttonIcon {
+    opacity: 0.9;
+}
