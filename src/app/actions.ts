@@ -66,7 +66,7 @@ export async function getGoal() {
     await ensureDbInitialized();
 
     const result = await db.execute("SELECT value FROM settings WHERE key = 'daily_goal'");
-    const row = result.rows[0] as { value: string } | undefined;
+    const row = result.rows[0] as unknown as { value: string } | undefined;
     return parseInt(row?.value || '2000');
 }
 
