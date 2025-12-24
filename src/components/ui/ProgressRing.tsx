@@ -2,7 +2,6 @@
 
 import React from 'react';
 import styles from './ProgressRing.module.css';
-import { FlameIcon } from './Icons';
 
 interface ProgressRingProps {
     radius?: number;
@@ -14,7 +13,7 @@ interface ProgressRingProps {
 
 export function ProgressRing({
     radius = 100,
-    stroke = 8,
+    stroke = 6,
     progress,
     goal,
     current
@@ -50,10 +49,9 @@ export function ProgressRing({
                 />
             </svg>
             <div className={styles.content}>
-                <FlameIcon size={24} className={styles.icon} />
                 <span className={styles.value}>{current}</span>
                 <span className={styles.sub}>
-                    / {goal}
+                    / {goal} kcal
                 </span>
             </div>
         </div>

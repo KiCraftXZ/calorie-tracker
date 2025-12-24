@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { SettingsIcon, UserIcon, PlusIcon, CheckIcon } from './ui/Icons';
+import { PlusIcon, CheckIcon, SettingsIcon, UserIcon } from './ui/Icons';
 import styles from './ProfileMenu.module.css';
 
 interface Profile {
@@ -15,21 +15,22 @@ interface Profile {
 interface Props {
     profiles: Profile[];
     createProfile: (name: string) => Promise<void>;
+    renameProfile: (newName: string) => Promise<void>; // Prop needed
     activeId: number;
 }
 
-export function ProfileMenu({ profiles, createProfile, activeId }: Props) {
+export function ProfileMenu({ profiles, createProfile, renameProfile, activeId }: Props) {
     const [isOpen, setIsOpen] = useState(false);
-    const [isAdding, setIsAdding] = useState(false);
+    const [mode, setMode] = useState<'list' | 'add' | 'rename'>('list');
     const router = useRouter();
     const menuRef = useRef<HTMLDivElement>(null);
+    const activeProfile = profiles.find(p => p.id === activeId);
 
-    // Close when clicking outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
-                setIsAdding(false);
+                setMode('list');
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -38,7 +39,7 @@ export function ProfileMenu({ profiles, createProfile, activeId }: Props) {
 
     const handleSwitch = (id: number) => {
         Cookies.set('active_profile_id', id.toString());
-        router.refresh(); // Refresh to load new profile data
+        router.refresh();
         setIsOpen(false);
     };
 
@@ -48,11 +49,21 @@ export function ProfileMenu({ profiles, createProfile, activeId }: Props) {
         const name = formData.get('name') as string;
         if (name) {
             await createProfile(name);
-            setIsAdding(false);
-            // Determine new ID (simplified) or just refesh
+            setMode('list');
             router.refresh();
         }
     };
+
+    const handleRename = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const name = formData.get('name') as string;
+        if (name) {
+            await renameProfile(name);
+            setMode('list');
+            router.refresh();
+        }
+    }
 
     return (
         <div className={styles.container} ref={menuRef}>
@@ -68,49 +79,82 @@ export function ProfileMenu({ profiles, createProfile, activeId }: Props) {
 
             {isOpen && (
                 <div className={styles.dropdown}>
-                    <div className={styles.header}>
-                        <span className={styles.title}>Profiles</span>
-                    </div>
 
-                    <div className={styles.list}>
-                        {profiles.map(p => (
+                    {mode === 'list' && (
+                        <>
+                            <div className={styles.header}>
+                                <span className={styles.title}>Profiles</span>
+                            </div>
+
+                            <div className={styles.list}>
+                                {profiles.map(p => (
+                                    <div key={p.id} className={styles.itemWrapper}>
+                                        <button
+                                            className={`${styles.item} ${p.id === activeId ? styles.active : ''}`}
+                                            onClick={() => handleSwitch(p.id)}
+                                        >
+                                            <div
+                                                className={styles.avatar}
+                                                style={{ background: p.avatar_color || '#ccc' }}
+                                            >
+                                                {p.name[0].toUpperCase()}
+                                            </div>
+                                            <span className={styles.name}>{p.name}</span>
+                                            {p.id === activeId && <CheckIcon size={16} className={styles.check} />}
+                                        </button>
+                                        {p.id === activeId && (
+                                            <button onClick={() => setMode('rename')} className={styles.editBtn}>
+                                                <SettingsIcon size={12} />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
                             <button
-                                key={p.id}
-                                className={`${styles.item} ${p.id === activeId ? styles.active : ''}`}
-                                onClick={() => handleSwitch(p.id)}
+                                className={styles.createBtn}
+                                onClick={() => setMode('add')}
                             >
-                                <div
-                                    className={styles.avatar}
-                                    style={{ background: p.avatar_color || '#ccc' }}
-                                >
-                                    {p.name[0].toUpperCase()}
-                                </div>
-                                <span className={styles.name}>{p.name}</span>
-                                {p.id === activeId && <CheckIcon size={16} className={styles.check} />}
+                                <PlusIcon size={16} />
+                                New Profile
                             </button>
-                        ))}
-                    </div>
-
-                    {isAdding ? (
-                        <form onSubmit={handleCreate} className={styles.addForm}>
-                            <input
-                                name="name"
-                                placeholder="Name..."
-                                autoFocus
-                                className={styles.input}
-                                maxLength={10}
-                            />
-                            <button type="submit" className={styles.addBtn}>Add</button>
-                        </form>
-                    ) : (
-                        <button
-                            className={styles.createBtn}
-                            onClick={() => setIsAdding(true)}
-                        >
-                            <PlusIcon size={16} />
-                            Add Profile
-                        </button>
+                        </>
                     )}
+
+                    {mode === 'add' && (
+                        <div className={styles.formContainer}>
+                            <div className={styles.header}>New Profile</div>
+                            <form onSubmit={handleCreate} className={styles.addForm}>
+                                <input
+                                    name="name"
+                                    placeholder="Name..."
+                                    autoFocus
+                                    className={styles.input}
+                                    maxLength={12}
+                                />
+                                <button type="submit" className={styles.addBtn}>Add</button>
+                            </form>
+                            <button onClick={() => setMode('list')} className={styles.backBtn}>Cancel</button>
+                        </div>
+                    )}
+
+                    {mode === 'rename' && (
+                        <div className={styles.formContainer}>
+                            <div className={styles.header}>Rename Profile</div>
+                            <form onSubmit={handleRename} className={styles.addForm}>
+                                <input
+                                    name="name"
+                                    defaultValue={activeProfile?.name}
+                                    autoFocus
+                                    className={styles.input}
+                                    maxLength={12}
+                                />
+                                <button type="submit" className={styles.addBtn}>Save</button>
+                            </form>
+                            <button onClick={() => setMode('list')} className={styles.backBtn}>Cancel</button>
+                        </div>
+                    )}
+
                 </div>
             )}
         </div>

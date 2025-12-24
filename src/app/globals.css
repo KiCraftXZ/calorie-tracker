@@ -1,47 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  /* Bubbly Pastel Palette */
-  --bg-primary: #fff0f5;
-  /* Lavender Blush */
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #fdf2e9;
+  /* Earth Tone Palette - Minimalistic */
+  --bg-primary: #F5F2EA;
+  /* Creamy Beige */
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #E8E4D9;
+  /* Stone Grey-Beige */
 
-  /* Cute Colors */
-  --primary: #FF9EB5;
-  /* Soft Pink */
-  --primary-dark: #FF6B9B;
-  --primary-light: #FFC2D4;
-  --primary-subtle: rgba(255, 158, 181, 0.15);
+  /* Primary Colors */
+  --primary: #6B705C;
+  /* Sage Green */
+  --primary-dark: #4A4E40;
+  --primary-light: #A5A58D;
+  --primary-subtle: rgba(107, 112, 92, 0.1);
 
-  --accent-blue: #A2D2FF;
-  --accent-green: #B9F6CA;
-  --accent-yellow: #FFF59D;
-  --accent-purple: #E0BBE4;
+  /* Accents */
+  --accent-clay: #BC6C25;
+  /* Burnt Orange/Clay */
+  --accent-sand: #DDA15E;
 
   /* Typography */
-  --text-primary: #5D576B;
-  /* Soft purple-grey */
-  --text-secondary: #888291;
-  --text-light: #B4B0BE;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-light: #999999;
+  --text-muted: #888888;
 
   /* Semantic */
-  --success: #88D8B0;
-  --warning: #FFD460;
-  --danger: #FF6666;
+  --success: #6B705C;
+  --warning: #DDA15E;
+  --danger: #BC6C25;
 
   /* Cards */
-  --card-bg: #ffffff;
-  --card-border: transparent;
-  --card-shadow: 0 8px 20px rgba(255, 158, 181, 0.15);
-  --card-shadow-hover: 0 12px 28px rgba(255, 158, 181, 0.25);
+  --card-bg: #FFFFFF;
+  --card-border: 1px solid #EAE7DC;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   /* Shapes */
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
   --radius-round: 9999px;
 
-  --font-bubble: 'Quicksand', sans-serif;
+  --font-main: 'Inter', sans-serif;
 }
 
 * {
@@ -53,59 +55,67 @@
 body {
   color: var(--text-primary);
   background: var(--bg-primary);
-  font-family: var(--font-bubble);
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   font-size: 16px;
-  background-image: radial-gradient(#FFC2D4 1.5px, transparent 1.5px);
-  background-size: 32px 32px;
-  /* Polka dot pattern */
+  line-height: 1.5;
 }
 
 a {
-  color: var(--primary-dark);
+  color: var(--primary);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
-/* Bubbly Card */
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Minimalist Card */
 .card {
   background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--card-shadow);
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
-  border: 4px solid white;
+  border: var(--card-border);
+  transition: all 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px) scale(1.01);
+  transform: translateY(-1px);
   box-shadow: var(--card-shadow-hover);
 }
 
-/* Bubbly Button */
+/* Minimalist Button */
 .btn {
   border: none;
   cursor: pointer;
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius-round);
-  font-weight: 700;
-  font-family: var(--font-bubble);
-  transition: transform 0.1s;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-family: var(--font-main);
+  transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9375rem;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn:hover {
+  background: #E0DBD0;
 }
 
 .btn:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
 }
 
 .btn-primary {
   background: var(--primary);
   color: white;
-  box-shadow: 0 4px 12px var(--primary-subtle);
 }
 
 .btn-primary:hover {
@@ -114,13 +124,12 @@ a {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-light);
+  background: #D6D2C4;
   border-radius: 99px;
-  border: 2px solid var(--bg-primary);
 }
 
 ::-webkit-scrollbar-track {

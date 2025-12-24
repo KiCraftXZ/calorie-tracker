@@ -4,49 +4,49 @@
 }
 
 .trigger {
-    background: white;
+    background: transparent;
     border: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.1s;
+    transition: all 0.2s;
 }
 
-.trigger:active {
-    transform: scale(0.95);
+.trigger:hover {
+    background: rgba(0, 0, 0, 0.03);
 }
 
 .bar {
-    width: 20px;
-    height: 3px;
+    width: 18px;
+    height: 2px;
     background: var(--text-primary);
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 .dropdown {
     position: absolute;
-    top: 55px;
+    top: 45px;
     left: 0;
-    width: 240px;
+    width: 220px;
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    animation: slideDown 0.2s ease-out;
-    border: 4px solid var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    /* Minimal shadow */
+    padding: 0.75rem;
+    animation: fadeIn 0.15s ease-out;
+    border: 1px solid var(--bg-tertiary);
 }
 
-@keyframes slideDown {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-5px);
     }
 
     to {
@@ -56,24 +56,27 @@
 }
 
 .header {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px dashed var(--bg-primary);
-}
-
-.title {
-    font-weight: 700;
+    border-bottom: 1px solid var(--bg-primary);
+    font-weight: 600;
     color: var(--text-muted);
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
 }
 
 .list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
     margin-bottom: 0.75rem;
+}
+
+.itemWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .item {
@@ -83,10 +86,10 @@
     background: transparent;
     border: none;
     padding: 0.5rem;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     transition: background 0.1s;
-    width: 100%;
+    flex: 1;
 }
 
 .item:hover {
@@ -94,52 +97,73 @@
 }
 
 .item.active {
-    background: var(--bg-tertiary);
+    background: var(--bg-primary);
 }
 
 .avatar {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     border-radius: 99px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-weight: 700;
-    font-size: 0.875rem;
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    font-size: 0.75rem;
 }
 
 .name {
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-primary);
     flex: 1;
     text-align: left;
+    font-size: 0.875rem;
 }
 
 .check {
     color: var(--primary);
 }
 
+.editBtn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    border-radius: var(--radius-sm);
+}
+
+.editBtn:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
 .createBtn {
     width: 100%;
-    background: var(--bg-tertiary);
+    background: var(--bg-primary);
     border: none;
-    padding: 0.75rem;
-    border-radius: 12px;
-    color: var(--primary-dark);
-    font-weight: 700;
+    padding: 0.625rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    transition: background 0.1s;
+    transition: all 0.1s;
+    font-size: 0.875rem;
 }
 
 .createBtn:hover {
-    background: #f0e6dd;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .addForm {
@@ -149,11 +173,12 @@
 
 .input {
     flex: 1;
-    border: 2px solid var(--bg-primary);
-    border-radius: 8px;
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--radius-md);
     padding: 0.5rem;
     font-family: inherit;
     outline: none;
+    font-size: 0.875rem;
 }
 
 .input:focus {
@@ -164,8 +189,18 @@
     background: var(--primary);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 0 0.75rem;
-    font-weight: 700;
+    font-weight: 500;
     cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.backBtn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    align-self: center;
 }

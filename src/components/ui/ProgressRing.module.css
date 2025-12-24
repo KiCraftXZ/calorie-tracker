@@ -7,14 +7,15 @@
 
 .circleBg {
     stroke: var(--bg-tertiary);
-    stroke-width: 12;
+    stroke-width: 6;
+    /* Thinner stroke */
     fill: transparent;
-    stroke-linecap: round;
 }
 
 .circleProgress {
     stroke: var(--primary);
-    stroke-width: 12;
+    stroke-width: 6;
+    /* Thinner stroke */
     stroke-linecap: round;
     fill: transparent;
     transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -31,22 +32,18 @@
     align-items: center;
 }
 
-.icon {
-    color: var(--warning);
-    margin-bottom: 0.25rem;
-}
-
 .value {
-    font-size: 3rem;
-    font-weight: 800;
+    font-size: 2.5rem;
+    font-weight: 600;
     color: var(--text-primary);
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
 .sub {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 400;
     margin-top: 0.25rem;
 }
 

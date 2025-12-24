@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { addEntry } from '@/app/actions';
 import styles from './FoodForm.module.css';
-import { UtensilsIcon, FlameIcon, PlusIcon } from './ui/Icons';
+import { PlusIcon } from './ui/Icons';
 
 export function FoodForm() {
     const ref = useRef<HTMLFormElement>(null);
@@ -20,37 +20,28 @@ export function FoodForm() {
 
     return (
         <form ref={ref} action={clientAction} className={styles.form}>
-            <div className={styles.inputGroup}>
-                <label className={styles.label}>
-                    <UtensilsIcon size={14} className={styles.labelIcon} />
-                    Food name
-                </label>
+            <div className={styles.inputGroup} style={{ flex: 2 }}>
                 <input
                     name="name"
-                    placeholder="e.g., Grilled Chicken Salad"
+                    placeholder="Food name..."
                     className={styles.input}
                     required
                     autoComplete="off"
                 />
             </div>
-            <div className={styles.inputGroup}>
-                <label className={styles.label}>
-                    <FlameIcon size={14} className={styles.labelIcon} />
-                    Calories
-                </label>
+            <div className={styles.inputGroup} style={{ flex: 1 }}>
                 <input
                     name="calories"
                     type="number"
-                    placeholder="e.g., 350"
+                    placeholder="Kcal"
                     className={styles.input}
                     required
                     min="0"
                     step="1"
                 />
             </div>
-            <button type="submit" className={styles.button}>
-                <PlusIcon size={18} className={styles.buttonIcon} />
-                Add Entry
+            <button type="submit" className={styles.button} aria-label="Add">
+                <PlusIcon size={20} />
             </button>
         </form>
     );

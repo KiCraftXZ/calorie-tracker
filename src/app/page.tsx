@@ -4,6 +4,7 @@ import {
   deleteEntry,
   getProfiles,
   createProfile,
+  renameProfile, // Added
   getWeaklyData
 } from './actions';
 import { cookies } from 'next/headers';
@@ -12,7 +13,7 @@ import { ProgressRing } from '@/components/ui/ProgressRing';
 import { FoodForm } from '@/components/FoodForm';
 import { ProfileMenu } from '@/components/ProfileMenu';
 import { CalorieChart } from '@/components/CalorieChart';
-import { LeafIcon, PlusIcon, ClockIcon, TrashIcon, SettingsIcon, UtensilsIcon } from '@/components/ui/Icons';
+import { PlusIcon, TrashIcon, SettingsIcon, UtensilsIcon, LeafIcon } from '@/components/ui/Icons';
 import styles from './page.module.css';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -30,6 +31,7 @@ export default async function Home() {
     getWeaklyData()
   ]);
 
+  const activeProfile = profiles.find(p => p.id === activeProfileId);
   const totalCalories = entries.reduce((sum, entry) => sum + entry.calories, 0);
   const progress = (totalCalories / goal) * 100;
 
@@ -41,22 +43,20 @@ export default async function Home() {
           <ProfileMenu
             profiles={profiles}
             createProfile={createProfile}
+            renameProfile={renameProfile}
             activeId={activeProfileId}
           />
           <Link href="/settings" className={styles.settingsBtn}>
-            <SettingsIcon size={24} />
+            <SettingsIcon size={20} />
           </Link>
         </div>
 
         {/* Header */}
         <header className={styles.header}>
           <h1 className={styles.title}>
-            <LeafIcon size={28} className={styles.titleIcon} />
-            Hello!
+            {activeProfile?.name || 'Hello'}
           </h1>
-          <p className={styles.subtitle}>
-            Let's eat something yummy.
-          </p>
+          <p className={styles.subtitle}>Daily Progress</p>
         </header>
 
         {/* Progress Card */}
@@ -65,17 +65,17 @@ export default async function Home() {
             progress={progress}
             goal={goal}
             current={totalCalories}
-            radius={110}
-            stroke={12}
+            radius={100}
+            stroke={8}
           />
         </Card>
 
         {/* Weekly Graph */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <div className={styles.sectionTitle}>Weekly Yumminess</div>
+            <div className={styles.sectionTitle}>Overview</div>
           </div>
-          <Card className={styles.graphCard}>
+          <Card className={`${styles.graphCard} card`}>
             <CalorieChart data={weeklyData} goal={goal} />
           </Card>
         </section>
@@ -83,7 +83,7 @@ export default async function Home() {
         {/* Quick Add */}
         <section className={styles.section}>
           <div className={styles.sectionHeader}>
-            <div className={styles.sectionTitle}>Add Food</div>
+            <div className={styles.sectionTitle}>Quick Add</div>
           </div>
           <Card className={`${styles.formCard} card`}>
             <FoodForm />
@@ -95,23 +95,19 @@ export default async function Home() {
           <div className={styles.sectionHeader}>
             <div className={styles.sectionTitle}>Today</div>
             <Link href="/history" className={styles.link}>
-              View all
+              View History
             </Link>
           </div>
 
           <div className={styles.list}>
             {entries.length === 0 ? (
               <div className={styles.emptyState}>
-                <UtensilsIcon size={48} className={styles.emptyIcon} />
-                <p className={styles.emptyText}>Nothing yet!</p>
+                <p className={styles.emptyText}>No entries yet</p>
               </div>
             ) : (
               entries.map((entry) => (
-                <Card key={entry.id} className={`${styles.entryItem} card`}>
+                <div key={entry.id} className={styles.entryItem}>
                   <div className={styles.entryLeft}>
-                    <div className={styles.entryIcon}>
-                      <UtensilsIcon size={20} />
-                    </div>
                     <div className={styles.entryInfo}>
                       <span className={styles.entryName}>{entry.name}</span>
                     </div>
@@ -125,11 +121,11 @@ export default async function Home() {
                       await deleteEntry(entry.id);
                     }}>
                       <button type="submit" className={styles.deleteBtn}>
-                        <TrashIcon size={18} />
+                        <TrashIcon size={16} />
                       </button>
                     </form>
                   </div>
-                </Card>
+                </div>
               ))
             )}
           </div>

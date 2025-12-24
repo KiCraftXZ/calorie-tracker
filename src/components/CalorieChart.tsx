@@ -13,18 +13,17 @@ interface Props {
 }
 
 export function CalorieChart({ data, goal }: Props) {
-    // Pad data to ensure we have 7 days roughly if empty
     const displayData = data.length > 0 ? data : [{ date: 'Today', total: 0 }];
 
     return (
-        <div style={{ width: '100%', height: 200 }}>
+        <div style={{ width: '100%', height: 180 }}>
             <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={displayData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <BarChart data={displayData} margin={{ top: 10, right: 0, left: -25, bottom: 0 }}>
                     <XAxis
                         dataKey="date"
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#B4B0BE', fontSize: 10, fontWeight: 700 }}
+                        tick={{ fill: '#888888', fontSize: 10 }}
                         tickFormatter={(val) => {
                             const d = new Date(val);
                             return isNaN(d.getTime()) ? val : d.toLocaleDateString(undefined, { weekday: 'short' });
@@ -32,20 +31,21 @@ export function CalorieChart({ data, goal }: Props) {
                     />
                     <YAxis hide />
                     <Tooltip
-                        cursor={{ fill: 'rgba(0,0,0,0.03)', radius: 8 }}
+                        cursor={{ fill: '#F5F2EA' }}
                         contentStyle={{
-                            borderRadius: 16,
+                            borderRadius: 8,
                             border: 'none',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                            padding: '8px 12px'
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                            fontSize: 12,
+                            color: '#333'
                         }}
                         labelStyle={{ display: 'none' }}
                     />
-                    <Bar dataKey="total" radius={[8, 8, 8, 8]} barSize={24}>
+                    <Bar dataKey="total" radius={[4, 4, 4, 4]} barSize={20}>
                         {displayData.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill={entry.total > goal ? '#FFD460' : '#FF9EB5'}
+                                fill={entry.total > goal ? '#DDA15E' : '#A5A58D'}
                             />
                         ))}
                     </Bar>

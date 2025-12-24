@@ -3,6 +3,7 @@
 import db, { ensureDbInitialized } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export interface Entry {
     id: number;
@@ -22,7 +23,7 @@ export interface Profile {
 async function getProfileId() {
     const cookieStore = await cookies();
     const id = cookieStore.get('active_profile_id')?.value;
-    return id ? parseInt(id) : 1; // Default to ID 1
+    return id ? parseInt(id) : 1;
 }
 
 export async function getProfiles() {
@@ -33,7 +34,8 @@ export async function getProfiles() {
 
 export async function createProfile(name: string) {
     await ensureDbInitialized();
-    const colors = ['#FDA7DF', '#D980FA', '#B53471', '#FFC312', '#C4E538', '#12CBC4', '#ED4C67', '#F79F1F', '#A3CB38', '#1289A7'];
+    // Earth tone avatars
+    const colors = ['#6B705C', '#A5A58D', '#DDA15E', '#BC6C25', '#CB997E', '#ddb892', '#b7b7a4'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     await db.execute({
@@ -43,7 +45,18 @@ export async function createProfile(name: string) {
     revalidatePath('/');
 }
 
-// Get entries for ACTIVE profile
+// Rename active profile
+export async function renameProfile(newName: string) {
+    await ensureDbInitialized();
+    const profileId = await getProfileId();
+
+    await db.execute({
+        sql: "UPDATE profiles SET name = ? WHERE id = ?",
+        args: [newName, profileId]
+    });
+    revalidatePath('/');
+}
+
 export async function getTodayEntries() {
     await ensureDbInitialized();
     const profileId = await getProfileId();
@@ -98,7 +111,7 @@ export async function addEntry(formData: FormData) {
 
 export async function deleteEntry(id: number) {
     await ensureDbInitialized();
-    const profileId = await getProfileId(); // Security check: ensure user owns entry (lite check)
+    const profileId = await getProfileId();
 
     await db.execute({
         sql: 'DELETE FROM entries WHERE id = ? AND profile_id = ?',
@@ -129,15 +142,13 @@ export async function updateGoal(newGoal: number) {
         args: [newGoal, profileId]
     });
     revalidatePath('/');
-    revalidatePath('/settings');
+    redirect('/'); // Redirect back to home
 }
 
-// Get entries for last 7 days for the graph
 export async function getWeaklyData() {
     await ensureDbInitialized();
     const profileId = await getProfileId();
 
-    // Aggregate by date for last 7 days
     const result = await db.execute({
         sql: `
       SELECT date(created_at, 'localtime') as date, SUM(calories) as total
