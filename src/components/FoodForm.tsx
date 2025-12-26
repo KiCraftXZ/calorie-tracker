@@ -1,40 +1,35 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { addEntry } from '@/app/actions';
 import styles from './FoodForm.module.css';
 import { PlusIcon, CheckIcon } from './ui/Icons';
-import { useRouter } from 'next/navigation';
 
 interface Props {
-    date?: string; // YYYY-MM-DD
+    date?: string;
+    onSubmit: (formData: FormData) => Promise<void>;
 }
 
-export function FoodForm({ date }: Props) {
+export function FoodForm({ date, onSubmit }: Props) {
     const ref = useRef<HTMLFormElement>(null);
-    const router = useRouter();
     const [status, setStatus] = useState<'idle' | 'success'>('idle');
 
-    async function clientAction(formData: FormData) {
+    async function handleSubmit(formData: FormData) {
         const name = formData.get('name');
         const calories = formData.get('calories');
 
         if (!name || !calories) return;
 
-        // Optimistic reset
+        // Instant reset + animation
         ref.current?.reset();
-
-        // Trigger Animation
         setStatus('success');
-        setTimeout(() => setStatus('idle'), 2000);
+        setTimeout(() => setStatus('idle'), 1500);
 
-        await addEntry(formData);
-        // Explicit refresh to ensure everything syncs (though server action usually handles it)
-        router.refresh();
+        // Fire-and-forget to parent (optimistic update happens there)
+        await onSubmit(formData);
     }
 
     return (
-        <form ref={ref} action={clientAction} className={styles.form}>
+        <form ref={ref} action={handleSubmit} className={styles.form}>
             {date && <input type="hidden" name="date" value={date} />}
 
             <div className={styles.inputGroup} style={{ flex: 2 }}>
@@ -64,7 +59,7 @@ export function FoodForm({ date }: Props) {
                 disabled={status === 'success'}
             >
                 {status === 'success' ? (
-                    <CheckIcon size={24} className={styles.checkIcon} /> // Size 24 matches PlusIcon
+                    <CheckIcon size={24} className={styles.checkIcon} />
                 ) : (
                     <PlusIcon size={24} />
                 )}
