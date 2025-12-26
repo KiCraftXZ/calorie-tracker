@@ -69,7 +69,12 @@ export default async function Home({ searchParams }: PageProps) {
         </header>
 
         {/* Client-Side Dashboard with Optimistic UI */}
-        <Dashboard entries={entries} goal={goal} date={targetDate} />
+        <Dashboard
+          entries={entries}
+          goal={goal}
+          date={targetDate}
+          profileName={activeProfile?.name || 'Friend'}
+        />
       </div>
     </main>
   );

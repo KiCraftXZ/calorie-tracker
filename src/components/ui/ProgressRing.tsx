@@ -63,7 +63,11 @@ export function ProgressRing({
             </svg>
             <div className={styles.content}>
                 <span className={styles.value} style={{ color }}>{current}</span>
-                <span className={styles.sub}>{goal} Goal</span>
+                <div className={styles.sub}>
+                    <span className={styles.ofLabel}>of</span>
+                    <span className={styles.goalValue}>{goal}</span>
+                </div>
+                <div className={styles.sub} style={{ fontSize: '0.65rem' }}>kcal</div>
             </div>
         </div>
     );
