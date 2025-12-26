@@ -60,14 +60,6 @@ export default async function Home({ searchParams }: PageProps) {
           <DateNavigator date={targetDate} />
         </div>
 
-        {/* Header */}
-        <header className={styles.header}>
-          <h1 className={styles.title}>
-            {activeProfile?.name || 'Hello'}
-          </h1>
-          <p className={styles.subtitle}>Daily Progress</p>
-        </header>
-
         {/* Client-Side Dashboard with Optimistic UI */}
         <Dashboard
           entries={entries}

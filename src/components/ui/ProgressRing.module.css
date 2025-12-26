@@ -11,7 +11,8 @@
 }
 
 .circleBg {
-    stroke: var(--bg-secondary);
+    stroke: #D6D2C4;
+    /* Darker/Warmer Grey for better contrast (Requested) */
     fill: transparent;
 }
 
@@ -37,13 +38,11 @@
 
 .value {
     font-size: 2.75rem;
-    /* Larger */
-    font-weight: 800;
-    /* Bolder */
+    font-weight: 700;
+    /* Less bold (was 800) - Requested */
     line-height: 1;
     transition: color 0.3s ease;
     letter-spacing: -0.04em;
-    /* Premium text shadow */
     text-shadow: 0 2px 10px rgba(79, 93, 72, 0.15);
 }
 

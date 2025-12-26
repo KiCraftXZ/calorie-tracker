@@ -42,7 +42,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
     const totalCalories = optimisticEntries.reduce((sum, entry) => sum + entry.calories, 0);
     const progress = (totalCalories / goal) * 100;
 
-    // Dynamic Greeting & Celebration
+    // Dynamic Greeting & Celebration logic
     useEffect(() => {
         const hour = new Date().getHours();
         let greet = 'Hello';
@@ -53,15 +53,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
         // Combine with name
         if (progress >= 100) {
             greet = `Goal Crushed, ${profileName}! 🎉`;
-            // Random burst logic
-            if (Math.random() > 0.8) {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#4F5D48', '#8A9A81', '#E6C288', '#C07A55']
-                });
-            }
+            // Logic moved to handleAddEntry to prevent double trigger on mount/re-render
         } else {
             greet = `${greet}, ${profileName}`;
         }
@@ -82,7 +74,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
             created_at: new Date().toISOString(),
         };
 
-        // Check for goal completion on ADD
+        // Check for goal completion on ADD (Client-side trigger only)
         if ((totalCalories + calories) / goal >= 1 && progress < 100) {
             confetti({
                 particleCount: 150,
@@ -95,7 +87,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
         startTransition(async () => {
             dispatchOptimistic({ type: 'add', entry: optimisticEntry });
             await addEntry(formData);
-            router.refresh();
+            router.refresh(); // Server re-render shouldn't re-trigger confetti if handled right
         });
     }
 
@@ -124,7 +116,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
                     goal={goal}
                     current={totalCalories}
                     radius={110}
-                    stroke={4}
+                    stroke={8} /* Thicker stroke per request */
                 />
             </Card>
 
