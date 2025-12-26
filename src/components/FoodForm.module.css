@@ -44,8 +44,7 @@
     height: 48px;
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    /* Bouncy transition */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,7 +63,7 @@
     transform: scale(0.92);
 }
 
-/* Success State */
+/* Success State - More Dramatic */
 .success {
     background: var(--success) !important;
     transform: scale(1.1) rotate(360deg) !important;
@@ -73,15 +72,22 @@
 }
 
 .checkIcon {
-    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popIn {
-    from {
-        transform: scale(0);
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
     }
 
-    to {
-        transform: scale(1);
+    60% {
+        transform: scale(1.4) rotate(10deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
     }
 }

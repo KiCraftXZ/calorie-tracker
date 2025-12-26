@@ -17,8 +17,8 @@
     stroke-width: 4;
     stroke-linecap: round;
     fill: transparent;
-    transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
-    /* Slower ease */
+    /* Smoother transition for heat change */
+    transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1), stroke 1s ease;
 }
 
 .content {
