@@ -1,0 +1,58 @@
+.main {
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    padding-bottom: 6rem;
+    /* Bottom nav spacing if needed */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.backBtn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: white;
+    color: var(--text-primary);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s;
+}
+
+.backBtn:hover {
+    transform: scale(1.05);
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 400px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        /* Responsive columns */
+    }
+}

@@ -46,6 +46,9 @@ export default async function Home({ searchParams }: PageProps) {
             activeId={activeProfileId}
           />
           <div className={styles.topActions}>
+            <Link href="/ideas" className={styles.iconBtn} aria-label="Ideas">
+              <span style={{ fontSize: '1.25rem' }}>💡</span>
+            </Link>
             <Link href="/overview" className={styles.iconBtn} aria-label="Overview">
               <ChartIcon size={20} />
             </Link>
