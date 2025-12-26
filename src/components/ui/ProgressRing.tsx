@@ -24,17 +24,17 @@ export function ProgressRing({
     const visualProgress = Math.min(Math.max(progress, 0), 100);
     const strokeDashoffset = circumference - (visualProgress / 100) * circumference;
 
-    // Determine Color Temperature
-    let color = '#4F5D48'; // Cool Olive (default)
+    // Organic Growth Palette (0-25-50-75-100)
+    let color = '#A5A58D'; // < 25%: Soil/Neutral (Sage)
 
-    if (progress > 100) {
-        color = '#9A3A3A'; // Magma (Overfill)
-    } else if (progress > 80) {
-        color = '#CB6E58'; // Hot Clay
-    } else if (progress > 50) {
-        color = '#C07A55'; // Warm Terracotta
-    } else if (progress > 25) {
-        color = '#A5A58D'; // Neutral Olive
+    if (progress >= 100) {
+        color = '#2E5936'; // 100%+: Lush Forest Green
+    } else if (progress >= 75) {
+        color = '#4F5D48'; // 75-99%: Deep Olive (Primary)
+    } else if (progress >= 50) {
+        color = '#6A8A4F'; // 50-74%: Fresh Green
+    } else if (progress >= 25) {
+        color = '#8A9A81'; // 25-49%: Sprout (Light Olive)
     }
 
     return (
