@@ -14,16 +14,17 @@ interface Props {
     entries: Entry[];
     goal: number;
     date: string;
+    profileName: string;
 }
 
 type OptimisticAction =
     | { type: 'add'; entry: Entry }
     | { type: 'delete'; id: number };
 
-export function Dashboard({ entries, goal, date }: Props) {
+export function Dashboard({ entries, goal, date, profileName }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-    const [greeting, setGreeting] = useState('Hello');
+    const [greeting, setGreeting] = useState('');
 
     // Optimistic state
     const [optimisticEntries, dispatchOptimistic] = useOptimistic(
@@ -49,12 +50,11 @@ export function Dashboard({ entries, goal, date }: Props) {
         else if (hour < 18) greet = 'Good Afternoon';
         else greet = 'Good Evening';
 
+        // Combine with name
         if (progress >= 100) {
-            greet = 'Goal Crushed! 🎉';
-            // Trigger confetti if just reached (simple check)
-            // For now, just trigger it once on mount if full, or we could track previous state.
-            // Let's just create a nice burst if it's high.
-            if (Math.random() > 0.8) { // Occasional random burst if you reopen the app and satisfied
+            greet = `Goal Crushed, ${profileName}! 🎉`;
+            // Random burst logic
+            if (Math.random() > 0.8) {
                 confetti({
                     particleCount: 100,
                     spread: 70,
@@ -62,12 +62,12 @@ export function Dashboard({ entries, goal, date }: Props) {
                     colors: ['#4F5D48', '#8A9A81', '#E6C288', '#C07A55']
                 });
             }
-        } else if (progress > 50) {
-            greet = `${greet}, Keep it up!`;
+        } else {
+            greet = `${greet}, ${profileName}`;
         }
 
         setGreeting(greet);
-    }, [progress]);
+    }, [progress, profileName]);
 
     // Handler for adding entry
     async function handleAddEntry(formData: FormData) {
@@ -108,11 +108,13 @@ export function Dashboard({ entries, goal, date }: Props) {
         });
     }
 
+    // Fallback greeting during SSR/Hydration to prevent flicker
+    const displayGreeting = greeting || `Hello, ${profileName}`;
+
     return (
         <>
             <header className={`${styles.header} animate-enter`}>
-                <h1 className={styles.title}>{greeting}</h1>
-                <p className={styles.subtitle}>Daily Progress</p>
+                <h1 className={styles.title}>{displayGreeting}</h1>
             </header>
 
             {/* Progress Card */}
