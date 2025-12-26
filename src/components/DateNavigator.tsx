@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { ArrowLeftIcon } from './ui/Icons';
 import styles from './DateNavigator.module.css';
 
@@ -11,6 +11,7 @@ interface Props {
 
 export function DateNavigator({ date }: Props) {
     const router = useRouter();
+    const [isPending, startTransition] = useTransition();
 
     const currentDate = new Date(date);
     const today = new Date();
@@ -20,17 +21,21 @@ export function DateNavigator({ date }: Props) {
         const prev = new Date(currentDate);
         prev.setDate(prev.getDate() - 1);
         const prevStr = prev.toLocaleDateString('en-CA');
-        router.push(`/?date=${prevStr}`);
+        startTransition(() => {
+            router.push(`/?date=${prevStr}`);
+        });
     };
 
     const handleNext = () => {
         const next = new Date(currentDate);
         next.setDate(next.getDate() + 1);
         const nextStr = next.toLocaleDateString('en-CA');
-        router.push(`/?date=${nextStr}`);
+        startTransition(() => {
+            router.push(`/?date=${nextStr}`);
+        });
     };
 
-    // Format Display: "Today", "Yesterday", or "Fri, Oct 24"
+    // Format Display
     let displayDate;
     if (isToday) displayDate = "Today";
     else {
@@ -44,19 +49,19 @@ export function DateNavigator({ date }: Props) {
     }
 
     return (
-        <div className={styles.container}>
-            <button onClick={handlePrev} className={styles.arrowBtn} aria-label="Previous day">
+        <div className={`${styles.container} ${isPending ? styles.pending : ''}`}>
+            <button onClick={handlePrev} className={styles.arrowBtn} aria-label="Previous day" disabled={isPending}>
                 <ArrowLeftIcon size={18} />
             </button>
 
             <div className={styles.dateLabel}>
-                {displayDate}
+                {isPending ? '...' : displayDate}
             </div>
 
             <button
                 onClick={handleNext}
                 className={styles.arrowBtn}
-                disabled={isToday}
+                disabled={isToday || isPending}
                 aria-label="Next day"
                 style={{ opacity: isToday ? 0 : 1, pointerEvents: isToday ? 'none' : 'auto' }}
             >

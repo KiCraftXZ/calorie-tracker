@@ -5,9 +5,14 @@
     background: white;
     padding: 0.5rem;
     border-radius: 99px;
-    /* Pill shape */
     box-shadow: var(--card-shadow);
     border: var(--card-border);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.pending {
+    opacity: 0.6;
+    transform: scale(0.98);
 }
 
 .arrowBtn {
@@ -24,9 +29,14 @@
     transition: all 0.2s;
 }
 
-.arrowBtn:hover {
+.arrowBtn:hover:not(:disabled) {
     background: var(--bg-primary);
     color: var(--primary);
+}
+
+.arrowBtn:disabled {
+    cursor: default;
+    opacity: 0.5;
 }
 
 .nextIcon {

@@ -15,44 +15,55 @@ interface Props {
     date: string;
 }
 
+type OptimisticAction =
+    | { type: 'add'; entry: Entry }
+    | { type: 'delete'; id: number };
+
 export function Dashboard({ entries, goal, date }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    // Optimistic state for entries
-    const [optimisticEntries, addOptimisticEntry] = useOptimistic(
+    // Optimistic state for entries (supports add and delete)
+    const [optimisticEntries, dispatchOptimistic] = useOptimistic(
         entries,
-        (state, newEntry: Entry) => [newEntry, ...state]
+        (state, action: OptimisticAction) => {
+            if (action.type === 'add') {
+                return [action.entry, ...state];
+            } else if (action.type === 'delete') {
+                return state.filter(e => e.id !== action.id);
+            }
+            return state;
+        }
     );
 
     const totalCalories = optimisticEntries.reduce((sum, entry) => sum + entry.calories, 0);
     const progress = (totalCalories / goal) * 100;
 
-    // Handler for adding entry (called from FoodForm)
+    // Handler for adding entry
     async function handleAddEntry(formData: FormData) {
         const name = formData.get('name') as string;
         const calories = parseInt(formData.get('calories') as string);
 
         if (!name || isNaN(calories)) return;
 
-        // Optimistically add entry to UI immediately
         const optimisticEntry: Entry = {
-            id: Date.now(), // Temporary ID
+            id: Date.now(),
             name,
             calories,
             created_at: new Date().toISOString(),
         };
 
         startTransition(async () => {
-            addOptimisticEntry(optimisticEntry);
+            dispatchOptimistic({ type: 'add', entry: optimisticEntry });
             await addEntry(formData);
             router.refresh();
         });
     }
 
-    // Handler for deleting entry
+    // Handler for deleting entry (now optimistic!)
     async function handleDeleteEntry(id: number) {
         startTransition(async () => {
+            dispatchOptimistic({ type: 'delete', id });
             await deleteEntry(id);
             router.refresh();
         });
@@ -112,7 +123,6 @@ export function Dashboard({ entries, goal, date }: Props) {
                                         type="button"
                                         className={styles.deleteBtn}
                                         onClick={() => handleDeleteEntry(entry.id)}
-                                        disabled={isPending}
                                     >
                                         <TrashIcon size={16} />
                                     </button>
