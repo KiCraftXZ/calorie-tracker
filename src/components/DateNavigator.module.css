@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 99px;
+    /* Pill shape */
+    box-shadow: var(--card-shadow);
+    border: var(--card-border);
+}
+
+.arrowBtn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--text-secondary);
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.arrowBtn:hover {
+    background: var(--bg-primary);
+    color: var(--primary);
+}
+
+.nextIcon {
+    transform: rotate(180deg);
+}
+
+.dateLabel {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    min-width: 80px;
+    text-align: center;
+    letter-spacing: 0.01em;
+}

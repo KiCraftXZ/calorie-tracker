@@ -57,21 +57,31 @@ export async function renameProfile(newName: string) {
     revalidatePath('/');
 }
 
-export async function getTodayEntries() {
+// Ensure local date string YYYY-MM-DD
+function getLocalDateString() {
+    return new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+}
+
+export async function getEntries(date?: string) {
     await ensureDbInitialized();
     const profileId = await getProfileId();
+    const targetDate = date || getLocalDateString();
 
     const result = await db.execute({
         sql: `
       SELECT * FROM entries 
-      WHERE date(created_at, 'localtime') = date('now', 'localtime')
+      WHERE date(created_at, 'localtime') = ?
       AND profile_id = ?
       ORDER BY created_at DESC
     `,
-        args: [profileId]
+        args: [targetDate, profileId]
     });
 
     return result.rows as unknown as Entry[];
+}
+
+export async function getTodayEntries() {
+    return getEntries();
 }
 
 export async function getAllEntries() {
@@ -95,18 +105,27 @@ export async function addEntry(formData: FormData) {
 
     const name = formData.get('name') as string;
     const calories = parseInt(formData.get('calories') as string);
+    const dateStr = formData.get('date') as string || getLocalDateString();
 
     if (!name || isNaN(calories)) {
         throw new Error('Invalid input');
     }
 
+    // If date is today, use current time. If past, use noon on that day.
+    let timestamp;
+    if (dateStr === getLocalDateString()) {
+        timestamp = new Date().toISOString(); // Now
+    } else {
+        timestamp = new Date(dateStr + 'T12:00:00').toISOString(); // Noon
+    }
+
     await db.execute({
-        sql: 'INSERT INTO entries (name, calories, profile_id) VALUES (?, ?, ?)',
-        args: [name, calories, profileId]
+        sql: 'INSERT INTO entries (name, calories, created_at, profile_id) VALUES (?, ?, ?, ?)',
+        args: [name, calories, timestamp, profileId]
     });
 
     revalidatePath('/');
-    revalidatePath('/history');
+    revalidatePath('/overview');
 }
 
 export async function deleteEntry(id: number) {
@@ -118,7 +137,7 @@ export async function deleteEntry(id: number) {
         args: [id, profileId]
     });
     revalidatePath('/');
-    revalidatePath('/history');
+    revalidatePath('/overview');
 }
 
 export async function getGoal() {
@@ -142,7 +161,7 @@ export async function updateGoal(newGoal: number) {
         args: [newGoal, profileId]
     });
     revalidatePath('/');
-    redirect('/'); // Redirect back to home
+    redirect('/');
 }
 
 export async function getWeaklyData() {
@@ -154,7 +173,7 @@ export async function getWeaklyData() {
       SELECT date(created_at, 'localtime') as date, SUM(calories) as total
       FROM entries 
       WHERE profile_id = ? 
-      AND created_at >= date('now', '-6 days', 'localtime')
+      AND created_at >= date('now', '-30 days', 'localtime')
       GROUP BY date(created_at, 'localtime')
       ORDER BY date
     `,

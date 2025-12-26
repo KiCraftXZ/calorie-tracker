@@ -9,11 +9,9 @@
 .dashboard {
   width: 100%;
   max-width: 440px;
-  /* Slightly wider */
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  /* More breathing room */
 }
 
 /* Header Area */
@@ -25,7 +23,12 @@
   margin-bottom: 0.5rem;
 }
 
-.settingsBtn {
+.topActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.iconBtn {
   color: var(--text-light);
   width: 44px;
   height: 44px;
@@ -38,10 +41,16 @@
   box-shadow: var(--card-shadow);
 }
 
-.settingsBtn:hover {
+.iconBtn:hover {
   color: var(--primary);
   transform: translateY(-1px);
   box-shadow: var(--card-shadow-hover);
+}
+
+.dateNavWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .header {
@@ -51,7 +60,6 @@
 
 .title {
   font-size: 1.75rem;
-  /* Larger */
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.03em;
@@ -78,10 +86,6 @@
   position: relative;
   overflow: hidden;
   background: linear-gradient(145deg, #ffffff 0%, #fdfcf9 100%);
-}
-
-.graphCard {
-  padding: 1.5rem 1rem 1rem 1rem;
 }
 
 .formCard {
@@ -111,17 +115,6 @@
   opacity: 0.9;
 }
 
-.link {
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.link:hover {
-  color: var(--primary);
-}
-
 /* Lists */
 .list {
   display: flex;
@@ -136,7 +129,6 @@
   padding: 1rem 1.25rem;
   background: white;
   min-height: 80px;
-  /* Taller touch targets */
 }
 
 .entryLeft {
@@ -214,7 +206,6 @@
 .deleteBtn:hover {
   color: var(--danger);
   background: rgba(203, 110, 88, 0.08);
-  /* Danger subtle */
   border-color: rgba(203, 110, 88, 0.1);
 }
 
