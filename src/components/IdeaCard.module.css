@@ -1,8 +1,11 @@
 .card {
     overflow: hidden;
-    height: 100%;
+    height: auto;
+    /* Allow growth */
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .imageWrapper {
@@ -21,12 +24,16 @@
     transform: scale(1.05);
 }
 
-.badge {
+.badges {
     position: absolute;
     top: 12px;
     right: 12px;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.badge {
     background: rgba(44, 48, 40, 0.85);
-    /* Dark semi-transparent */
     color: white;
     padding: 4px 10px;
     border-radius: 99px;
@@ -36,12 +43,32 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.proteinBadge {
+    background: rgba(230, 194, 136, 0.9);
+    /* Gold/Wheat color for protein */
+    color: #3A4134;
+}
+
 .content {
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    flex: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.chevron {
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.rotate {
+    transform: rotate(180deg);
 }
 
 .title {
@@ -55,7 +82,63 @@
     font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.5;
-    flex: 1;
+}
+
+/* Dropdown Animation */
+.details {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.4s ease;
+}
+
+.show {
+    max-height: 500px;
+    /* Arbitrary large height */
+    opacity: 1;
+    transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in;
+}
+
+.divider {
+    height: 1px;
+    background: var(--border-color);
+    /* Need to ensure this var exists or use hex */
+    background: #E5E5E5;
+    margin: 0.5rem 0 1rem 0;
+}
+
+.ingredientsTitle {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.ingredientsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.ingredientsList li {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+}
+
+.ingredientsList li::before {
+    content: "•";
+    color: var(--brand-primary);
+    /* Green */
+    margin-right: 0.5rem;
+    font-weight: bold;
 }
 
 .button {
@@ -73,11 +156,12 @@
     gap: 0.5rem;
     transition: all 0.2s;
     font-size: 0.9375rem;
+    margin-top: auto;
+    /* Push to bottom if consistent height desired, or just margin */
 }
 
 .button:hover:not(:disabled) {
     background: #D6D2C4;
-    /* Darker grey hover */
     transform: translateY(-1px);
 }
 
