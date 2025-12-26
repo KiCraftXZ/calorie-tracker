@@ -145,8 +145,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
                         optimisticEntries.map((entry, index) => (
                             <div
                                 key={entry.id}
-                                className={`${styles.entryItem} animate-enter`}
-                                style={{ animationDelay: `${0.4 + (index * 0.05)}s` }} // Staggered delay
+                                className={styles.entryItem}
                             >
                                 <div className={styles.entryLeft}>
                                     <div className={styles.entryInfo}>
