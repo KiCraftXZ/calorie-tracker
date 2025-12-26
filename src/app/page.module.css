@@ -1,125 +1,121 @@
-.main {
-  min-height: 100vh;
-  padding: 3rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.dashboard {
-  width: 100%;
-  max-width: 440px;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-/* Header Area */
-.topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.topActions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.iconBtn {
-  color: var(--text-light);
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  background: white;
-  box-shadow: var(--card-shadow);
-}
-
-.iconBtn:hover {
-  color: var(--primary);
-  transform: translateY(-1px);
-  box-shadow: var(--card-shadow-hover);
-}
-
-.dateNavWrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
 .header {
-  text-align: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 
 .title {
   font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  /* Bolder */
+  color: var(--primary);
   letter-spacing: -0.03em;
   margin-bottom: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 
 .subtitle {
+  font-size: 0.9375rem;
   color: var(--text-secondary);
-  font-size: 1rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-weight: 500;
 }
 
-/* Cards */
 .summaryCard {
+  margin: 0 1rem 2.5rem 1rem;
+  padding: 2.5rem 1.5rem;
+  /* More breathing room */
   display: flex;
-  justify-content: center;
-  padding: 3rem 2rem;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
-  overflow: hidden;
-  background: linear-gradient(145deg, #ffffff 0%, #fdfcf9 100%);
+  overflow: visible;
+  /* Allow glow */
+  background: white;
+  /* Clean */
 }
 
-.formCard {
-  padding: 1.5rem;
+/* Add Insight Text */
+.insightText {
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.5s forwards;
 }
 
 /* Sections */
 .section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 
 .sectionHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.25rem;
 }
 
 .sectionTitle {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.9;
+  letter-spacing: 0.05em;
 }
 
-/* Lists */
+/* HERO ADD CARD (The Dark "Command Center") */
+.heroCard {
+  background: var(--primary);
+  /* Deep Forest */
+  color: white;
+  box-shadow: 0 20px 40px -10px rgba(26, 46, 26, 0.4);
+  /* Deep shadow */
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+}
+
+/* Decorative Lime Glow */
+.heroGlow {
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: var(--accent-lime);
+  filter: blur(80px);
+  /* Soft ambient light */
+  opacity: 0.15;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Log List Styles */
 .list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 2px dashed rgba(79, 93, 72, 0.1);
+}
+
+.emptyText {
+  color: var(--text-light);
+  font-weight: 500;
 }
 
 .entryItem {
@@ -128,38 +124,39 @@
   align-items: center;
   padding: 1rem 1.25rem;
   background: white;
-  min-height: 80px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+  border: 1px solid transparent;
+  transition: all 0.2s;
 }
 
-.entryLeft {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  flex: 1;
+.entryItem:hover {
+  transform: translateX(4px);
+  /* Interactive nudge */
+  border-color: rgba(79, 93, 72, 0.2);
 }
 
 .entryInfo {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
 }
 
 .entryName {
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 600;
   color: var(--text-primary);
-  line-height: 1.3;
+  font-size: 1rem;
 }
 
 .entryTime {
   font-size: 0.75rem;
   color: var(--text-light);
+  margin-top: 2px;
 }
 
 .entryRight {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .entryCals {
@@ -170,56 +167,39 @@
 }
 
 .calValue {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
   color: var(--text-primary);
-  font-feature-settings: 'tnum';
+  line-height: 1;
 }
 
 .calLabel {
-  font-size: 0.75rem;
+  font-size: 0.625rem;
+  text-transform: uppercase;
   color: var(--text-light);
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .deleteBtn {
-  background: transparent;
-  border: 1px solid transparent;
+  background: none;
+  border: none;
   color: var(--text-light);
+  padding: 0.5rem;
+  border-radius: 50%;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
-  opacity: 0;
-  transform: translateX(10px);
-}
-
-.entryItem:hover .deleteBtn,
-.entryItem:focus-within .deleteBtn {
-  opacity: 1;
-  transform: translateX(0);
 }
 
 .deleteBtn:hover {
   color: var(--danger);
-  background: rgba(203, 110, 88, 0.08);
-  border-color: rgba(203, 110, 88, 0.1);
+  background: rgba(203, 110, 88, 0.1);
 }
 
-.emptyState {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: var(--radius-lg);
-  border: 1px dashed rgba(0, 0, 0, 0.05);
-}
-
-.emptyText {
-  font-size: 0.9375rem;
-  color: var(--text-light);
-  font-weight: 400;
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }

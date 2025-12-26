@@ -25,6 +25,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [greeting, setGreeting] = useState('');
+    const [insight, setInsight] = useState(''); // New "Soul" state
 
     // Optimistic state
     const [optimisticEntries, dispatchOptimistic] = useOptimistic(
@@ -42,7 +43,7 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
     const totalCalories = optimisticEntries.reduce((sum, entry) => sum + entry.calories, 0);
     const progress = (totalCalories / goal) * 100;
 
-    // Dynamic Greeting & Celebration logic
+    // Insight Engine & Dynamic Greeting
     useEffect(() => {
         const hour = new Date().getHours();
         let greet = 'Hello';
@@ -50,15 +51,22 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
         else if (hour < 18) greet = 'Good Afternoon';
         else greet = 'Good Evening';
 
-        // Combine with name
+        // Insight Logic
+        let msg = "Let's get this bread. 🥖";
+        if (progress === 0) msg = "Fuel the machine. 💪";
+        else if (progress < 30) msg = "Good start. Keep building.";
+        else if (progress < 60) msg = "Momentum is building... 🔥";
+        else if (progress < 90) msg = "Almost there. Finish strong!";
+        else if (progress >= 100) msg = "Mission Accomplished. 🚀";
+
         if (progress >= 100) {
-            greet = `Goal Crushed, ${profileName}! 🎉`;
-            // Logic moved to handleAddEntry to prevent double trigger on mount/re-render
+            greet = `Goal Crushed, ${profileName}!`;
         } else {
             greet = `${greet}, ${profileName}`;
         }
 
         setGreeting(greet);
+        setInsight(msg);
     }, [progress, profileName]);
 
     // Handler for adding entry
@@ -74,20 +82,20 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
             created_at: new Date().toISOString(),
         };
 
-        // Check for goal completion on ADD (Client-side trigger only)
+        // Check for goal completion on ADD
         if ((totalCalories + calories) / goal >= 1 && progress < 100) {
             confetti({
                 particleCount: 150,
                 spread: 60,
                 origin: { y: 0.7 },
-                colors: ['#4F5D48', '#8A9A81', '#E6C288', '#C07A55']
+                colors: ['#D4E157', '#C07A55', '#E6C288'] // Updated to new Lime accents
             });
         }
 
         startTransition(async () => {
             dispatchOptimistic({ type: 'add', entry: optimisticEntry });
             await addEntry(formData);
-            router.refresh(); // Server re-render shouldn't re-trigger confetti if handled right
+            router.refresh();
         });
     }
 
@@ -100,7 +108,6 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
         });
     }
 
-    // Fallback greeting during SSR/Hydration to prevent flicker
     const displayGreeting = greeting || `Hello, ${profileName}`;
 
     return (
@@ -109,40 +116,50 @@ export function Dashboard({ entries, goal, date, profileName }: Props) {
                 <h1 className={styles.title}>{displayGreeting}</h1>
             </header>
 
-            {/* Progress Card */}
-            <Card className={`${styles.summaryCard} card animate-enter`} style={{ animationDelay: '0.1s' }}>
+            {/* Progress Card - "Breathing" Pulse Effect if progress > 50 */}
+            <Card
+                className={`${styles.summaryCard} card animate-enter`}
+                style={{
+                    animationDelay: '0.1s',
+                    animation: progress > 0 && progress < 100 ? 'pulse 6s infinite ease-in-out' : undefined
+                }}
+            >
                 <ProgressRing
                     progress={progress}
                     goal={goal}
                     current={totalCalories}
                     radius={110}
-                    stroke={8} /* Thicker stroke per request */
+                    stroke={10} /* Thicker per V2 */
                 />
+                <div className={styles.insightText}>{insight}</div>
             </Card>
 
-            {/* Quick Add */}
+            {/* Quick Add - HERO SECTION (Dark Mode) */}
             <section className={`${styles.section} animate-enter`} style={{ animationDelay: '0.2s' }}>
                 <div className={styles.sectionHeader}>
-                    <div className={styles.sectionTitle}>Add Food</div>
+                    <div className={styles.sectionTitle}>Quick Fuel</div>
                 </div>
-                <Card className={`${styles.formCard} card`}>
-                    <FoodForm date={date} onSubmit={handleAddEntry} />
+                <Card className={`${styles.heroCard} card`}>
+                    <div className={styles.heroGlow} />
+                    <div className={styles.heroContent}>
+                        <FoodForm date={date} onSubmit={handleAddEntry} isHero={true} />
+                    </div>
                 </Card>
             </section>
 
             {/* Today's Log */}
             <section className={`${styles.section} animate-enter`} style={{ animationDelay: '0.3s' }}>
                 <div className={styles.sectionHeader}>
-                    <div className={styles.sectionTitle}>Log</div>
+                    <div className={styles.sectionTitle}>History</div>
                 </div>
 
                 <div className={styles.list}>
                     {optimisticEntries.length === 0 ? (
                         <div className={styles.emptyState}>
-                            <p className={styles.emptyText}>Ready to fuel your day? 🌱</p>
+                            <p className={styles.emptyText}>Nothing logged yet.</p>
                         </div>
                     ) : (
-                        optimisticEntries.map((entry, index) => (
+                        optimisticEntries.map((entry) => (
                             <div
                                 key={entry.id}
                                 className={styles.entryItem}

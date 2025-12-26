@@ -7,39 +7,41 @@
   /* Rice Paper */
   --bg-secondary: #EBE8E0;
   /* Warm Grey */
-  --primary: #4F5D48;
-  /* Deep Olive */
-  --primary-light: #8A9A81;
-  /* Sage */
-  --primary-dark: #3A4535;
-  /* Darker Olive */
 
+  --primary: #1A2E1A;
+  /* Deep Forest (New Base) */
+  --primary-light: #4F5D48;
+  /* Old Primary */
+  --primary-dark: #0F1A0F;
+  /* Almost Black */
+
+  /* High Energy Accents */
+  --accent-lime: #D4E157;
+  /* Electric Lime (Hero) */
   --accent-clay: #C07A55;
   /* Terracotta */
   --accent-sand: #E6C288;
   /* Gold/Sand */
 
-  --text-primary: #2C3028;
-  /* Almost Black */
+  --text-primary: #1A2E1A;
+  /* Deep Forest */
   --text-secondary: #5C6157;
-  /* Dark Grey */
   --text-light: #8C9187;
-  /* Light Grey */
   --text-muted: #AAB0A6;
-  /* Stone */
 
   --success: #2E5936;
-  /* Lush Forest Green */
   --danger: #CB6E58;
-  /* Clay Red */
 
-  --card-shadow: 0 4px 12px rgba(79, 93, 72, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
-  --card-shadow-hover: 0 8px 24px rgba(79, 93, 72, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
-  --card-border: 1px solid rgba(79, 93, 72, 0.05);
+  /* Deep Tactile Shadows */
+  --card-shadow: 0 10px 30px -10px rgba(26, 46, 26, 0.1), 0 4px 6px -4px rgba(26, 46, 26, 0.05);
+  --card-shadow-hover: 0 20px 40px -12px rgba(26, 46, 26, 0.15), 0 8px 12px -8px rgba(26, 46, 26, 0.1);
+  --card-border: 1px solid rgba(26, 46, 26, 0.03);
 
   --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 24px;
+  --radius-md: 16px;
+  /* softer */
+  --radius-lg: 32px;
+  /* Super soft */
 }
 
 * {
@@ -77,6 +79,23 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(212, 225, 87, 0.4);
+  }
+
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 15px rgba(212, 225, 87, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(212, 225, 87, 0);
   }
 }
 

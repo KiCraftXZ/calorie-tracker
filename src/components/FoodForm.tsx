@@ -7,9 +7,10 @@ import { PlusIcon, CheckIcon } from './ui/Icons';
 interface Props {
     date?: string;
     onSubmit: (formData: FormData) => Promise<void>;
+    isHero?: boolean;
 }
 
-export function FoodForm({ date, onSubmit }: Props) {
+export function FoodForm({ date, onSubmit, isHero = false }: Props) {
     const ref = useRef<HTMLFormElement>(null);
     const [status, setStatus] = useState<'idle' | 'success'>('idle');
 
@@ -29,14 +30,14 @@ export function FoodForm({ date, onSubmit }: Props) {
     }
 
     return (
-        <form ref={ref} action={handleSubmit} className={styles.form}>
+        <form ref={ref} action={handleSubmit} className={`${styles.form} ${isHero ? styles.heroForm : ''}`}>
             {date && <input type="hidden" name="date" value={date} />}
 
             <div className={styles.inputGroup} style={{ flex: 2 }}>
                 <input
                     name="name"
-                    placeholder="Food name..."
-                    className={styles.input}
+                    placeholder="What did you eat?"
+                    className={`${styles.input} ${isHero ? styles.heroInput : ''}`}
                     required
                     autoComplete="off"
                 />
@@ -46,7 +47,7 @@ export function FoodForm({ date, onSubmit }: Props) {
                     name="calories"
                     type="number"
                     placeholder="Kcal"
-                    className={styles.input}
+                    className={`${styles.input} ${isHero ? styles.heroInput : ''}`}
                     required
                     min="0"
                     step="1"
@@ -54,14 +55,14 @@ export function FoodForm({ date, onSubmit }: Props) {
             </div>
             <button
                 type="submit"
-                className={`${styles.button} ${status === 'success' ? styles.success : ''}`}
+                className={`${styles.button} ${isHero ? styles.heroButton : ''} ${status === 'success' ? styles.success : ''}`}
                 aria-label="Add"
                 disabled={status === 'success'}
             >
                 {status === 'success' ? (
                     <CheckIcon size={24} className={styles.checkIcon} />
                 ) : (
-                    <PlusIcon size={24} />
+                    <PlusIcon size={24} color={isHero ? '#1A2E1A' : 'currentColor'} />
                 )}
             </button>
         </form>
