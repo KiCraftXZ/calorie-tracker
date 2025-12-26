@@ -1,139 +1,125 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
+/* ... existing variables and resets ... */
 :root {
-  /* Premium Organic Palette */
+  /* Premium Earth Palette - Deep Olive & Rice Paper */
   --bg-primary: #F7F5F0;
-  /* Warm Rice Paper */
-  --bg-secondary: #FFFFFF;
-  --bg-tertiary: #EBE8E0;
-  /* Subtle Stone */
-
-  /* Primary Colors */
+  /* Rice Paper */
+  --bg-secondary: #EBE8E0;
+  /* Warm Grey */
   --primary: #4F5D48;
-  /* Deep Olive / Moss */
-  --primary-dark: #3A4435;
+  /* Deep Olive */
   --primary-light: #8A9A81;
-  --primary-subtle: rgba(79, 93, 72, 0.08);
+  /* Sage */
+  --primary-dark: #3A4535;
+  /* Darker Olive */
 
-  /* Accents */
   --accent-clay: #C07A55;
   /* Terracotta */
   --accent-sand: #E6C288;
-  /* Warm Sand */
-  --accent-blush: #E6DCD3;
+  /* Gold/Sand */
 
-  /* Typography */
   --text-primary: #2C3028;
-  /* Dark Olive Grey - softer than black */
+  /* Almost Black */
   --text-secondary: #5C6157;
-  --text-light: #8E948B;
+  /* Dark Grey */
+  --text-light: #8C9187;
+  /* Light Grey */
   --text-muted: #AAB0A6;
+  /* Stone */
 
-  /* Semantic */
-  --success: #4F5D48;
-  --warning: #D4A373;
+  --success: #2E5936;
+  /* Lush Forest Green */
   --danger: #CB6E58;
+  /* Clay Red */
 
-  /* Cards */
-  --card-bg: #FFFFFF;
-  --card-border: 1px solid rgba(0, 0, 0, 0.03);
-  /* Two-layer shadow for depth and softness */
-  --card-shadow:
-    0 4px 6px -1px rgba(79, 93, 72, 0.03),
-    0 2px 4px -1px rgba(79, 93, 72, 0.03);
-  --card-shadow-hover:
-    0 10px 15px -3px rgba(79, 93, 72, 0.08),
-    0 4px 6px -2px rgba(79, 93, 72, 0.04);
+  --card-shadow: 0 4px 12px rgba(79, 93, 72, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --card-shadow-hover: 0 8px 24px rgba(79, 93, 72, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --card-border: 1px solid rgba(79, 93, 72, 0.05);
 
-  /* Shapes */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 32px;
-  --radius-round: 9999px;
-
-  --font-main: 'Inter', sans-serif;
+  --radius-lg: 24px;
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
   color: var(--text-primary);
-  background: var(--bg-primary);
-  font-family: var(--font-main);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  font-size: 16px;
-  line-height: 1.6;
-
-  /* Subtle Noise Texture */
+  /* Subtle noise texture */
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
 }
 
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-enter {
+  animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+  /* Start hidden */
+}
+
+/* Stagger delays handled in component */
+
+img,
+svg {
+  display: block;
+}
+
 a {
-  color: var(--primary);
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+  color: inherit;
 }
 
-a:hover {
-  color: var(--primary-dark);
-}
-
-/* Premium Card */
 .card {
-  background: var(--card-bg);
+  background: white;
   border-radius: var(--radius-lg);
   box-shadow: var(--card-shadow);
   border: var(--card-border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
+/* More tangible lift on hover */
 .card:hover {
   transform: translateY(-2px);
   box-shadow: var(--card-shadow-hover);
-}
-
-/* Elegant Button */
-.btn {
-  border: none;
-  cursor: pointer;
-  padding: 0.875rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  font-family: var(--font-main);
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.9375rem;
-  letter-spacing: 0.01em;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-.btn:hover {
-  background: #E0DDD5;
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 4px 12px rgba(79, 93, 72, 0.2);
-}
-
-.btn-primary:hover {
-  background: var(--primary-dark);
-  box-shadow: 0 6px 16px rgba(79, 93, 72, 0.25);
-  transform: translateY(-1px);
 }

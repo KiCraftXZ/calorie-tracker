@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/js-cookie": "^3.0.6",
     "better-sqlite3": "^12.5.0",
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "js-cookie": "^3.0.5",
     "next": "16.1.1",

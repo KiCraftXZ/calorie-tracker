@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useOptimistic, useTransition } from 'react';
+import React, { useOptimistic, useTransition, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Entry, addEntry, deleteEntry } from '@/app/actions';
 import { Card } from '@/components/ui/Card';
@@ -8,6 +8,7 @@ import { ProgressRing } from '@/components/ui/ProgressRing';
 import { FoodForm } from '@/components/FoodForm';
 import { TrashIcon } from '@/components/ui/Icons';
 import styles from '@/app/page.module.css';
+import confetti from 'canvas-confetti';
 
 interface Props {
     entries: Entry[];
@@ -22,8 +23,9 @@ type OptimisticAction =
 export function Dashboard({ entries, goal, date }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
+    const [greeting, setGreeting] = useState('Hello');
 
-    // Optimistic state for entries (supports add and delete)
+    // Optimistic state
     const [optimisticEntries, dispatchOptimistic] = useOptimistic(
         entries,
         (state, action: OptimisticAction) => {
@@ -39,11 +41,38 @@ export function Dashboard({ entries, goal, date }: Props) {
     const totalCalories = optimisticEntries.reduce((sum, entry) => sum + entry.calories, 0);
     const progress = (totalCalories / goal) * 100;
 
+    // Dynamic Greeting & Celebration
+    useEffect(() => {
+        const hour = new Date().getHours();
+        let greet = 'Hello';
+        if (hour < 12) greet = 'Good Morning';
+        else if (hour < 18) greet = 'Good Afternoon';
+        else greet = 'Good Evening';
+
+        if (progress >= 100) {
+            greet = 'Goal Crushed! 🎉';
+            // Trigger confetti if just reached (simple check)
+            // For now, just trigger it once on mount if full, or we could track previous state.
+            // Let's just create a nice burst if it's high.
+            if (Math.random() > 0.8) { // Occasional random burst if you reopen the app and satisfied
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#4F5D48', '#8A9A81', '#E6C288', '#C07A55']
+                });
+            }
+        } else if (progress > 50) {
+            greet = `${greet}, Keep it up!`;
+        }
+
+        setGreeting(greet);
+    }, [progress]);
+
     // Handler for adding entry
     async function handleAddEntry(formData: FormData) {
         const name = formData.get('name') as string;
         const calories = parseInt(formData.get('calories') as string);
-
         if (!name || isNaN(calories)) return;
 
         const optimisticEntry: Entry = {
@@ -53,6 +82,16 @@ export function Dashboard({ entries, goal, date }: Props) {
             created_at: new Date().toISOString(),
         };
 
+        // Check for goal completion on ADD
+        if ((totalCalories + calories) / goal >= 1 && progress < 100) {
+            confetti({
+                particleCount: 150,
+                spread: 60,
+                origin: { y: 0.7 },
+                colors: ['#4F5D48', '#8A9A81', '#E6C288', '#C07A55']
+            });
+        }
+
         startTransition(async () => {
             dispatchOptimistic({ type: 'add', entry: optimisticEntry });
             await addEntry(formData);
@@ -60,7 +99,7 @@ export function Dashboard({ entries, goal, date }: Props) {
         });
     }
 
-    // Handler for deleting entry (now optimistic!)
+    // Handler for deleting entry
     async function handleDeleteEntry(id: number) {
         startTransition(async () => {
             dispatchOptimistic({ type: 'delete', id });
@@ -71,8 +110,13 @@ export function Dashboard({ entries, goal, date }: Props) {
 
     return (
         <>
+            <header className={`${styles.header} animate-enter`}>
+                <h1 className={styles.title}>{greeting}</h1>
+                <p className={styles.subtitle}>Daily Progress</p>
+            </header>
+
             {/* Progress Card */}
-            <Card className={`${styles.summaryCard} card`}>
+            <Card className={`${styles.summaryCard} card animate-enter`} style={{ animationDelay: '0.1s' }}>
                 <ProgressRing
                     progress={progress}
                     goal={goal}
@@ -83,7 +127,7 @@ export function Dashboard({ entries, goal, date }: Props) {
             </Card>
 
             {/* Quick Add */}
-            <section className={styles.section}>
+            <section className={`${styles.section} animate-enter`} style={{ animationDelay: '0.2s' }}>
                 <div className={styles.sectionHeader}>
                     <div className={styles.sectionTitle}>Add Food</div>
                 </div>
@@ -93,7 +137,7 @@ export function Dashboard({ entries, goal, date }: Props) {
             </section>
 
             {/* Today's Log */}
-            <section className={styles.section}>
+            <section className={`${styles.section} animate-enter`} style={{ animationDelay: '0.3s' }}>
                 <div className={styles.sectionHeader}>
                     <div className={styles.sectionTitle}>Log</div>
                 </div>
@@ -101,11 +145,15 @@ export function Dashboard({ entries, goal, date }: Props) {
                 <div className={styles.list}>
                     {optimisticEntries.length === 0 ? (
                         <div className={styles.emptyState}>
-                            <p className={styles.emptyText}>No entries for this day</p>
+                            <p className={styles.emptyText}>Ready to fuel your day? 🌱</p>
                         </div>
                     ) : (
-                        optimisticEntries.map((entry) => (
-                            <div key={entry.id} className={styles.entryItem}>
+                        optimisticEntries.map((entry, index) => (
+                            <div
+                                key={entry.id}
+                                className={`${styles.entryItem} animate-enter`}
+                                style={{ animationDelay: `${0.4 + (index * 0.05)}s` }} // Staggered delay
+                            >
                                 <div className={styles.entryLeft}>
                                     <div className={styles.entryInfo}>
                                         <span className={styles.entryName}>{entry.name}</span>
