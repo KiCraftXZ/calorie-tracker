@@ -49,7 +49,7 @@ export default async function Home({ searchParams }: PageProps) {
           />
           <div className={styles.topActions}>
             <Link href="/weight" className={styles.iconBtn} aria-label="Weight">
-              <ScaleIcon size={20} />
+              <ScaleIcon size={20} color="var(--primary)" />
             </Link>
             <Link href="/ideas" className={styles.iconBtn} aria-label="Ideas">
               <span style={{ fontSize: '1.25rem' }}>💡</span>

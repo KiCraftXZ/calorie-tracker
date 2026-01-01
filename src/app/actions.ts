@@ -256,9 +256,7 @@ export async function updateProfileDetails(formData: FormData) {
     });
 
     revalidatePath('/');
-
-    // Check if we need to redirect or just revalidate
-    // Since we are on settings page, maybe just revalidate
+    redirect('/');
 }
 
 export async function updateGoal(newGoal: number) {
