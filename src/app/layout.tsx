@@ -11,6 +11,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Calorie - Track Your Nutrition",
   description: "A beautiful and minimalistic calorie tracking app",
+  icons: {
+    icon: '/icon?v=3',
+  },
 };
 
 export default function RootLayout({
