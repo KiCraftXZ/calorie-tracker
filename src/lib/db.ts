@@ -40,6 +40,16 @@ export async function ensureDbInitialized() {
     )
   `);
 
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS weight_entries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      weight REAL NOT NULL,
+      date TEXT NOT NULL,
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      profile_id INTEGER DEFAULT 1
+    )
+  `);
+
   // Migration: Check if entries table has profile_id column, if not, we can't easily add it via IF NOT EXISTS on table creation.
   // SQLite doesn't throw if adding column that exists if using standard SQL, but let's be safe.
   try {
@@ -75,6 +85,20 @@ export async function ensureDbInitialized() {
     }
   }
 
+  // Migration: Add user details fields (Round 2)
+  const newCols2 = [
+    { name: 'gender', type: 'TEXT' },
+    { name: 'height', type: 'INTEGER' },
+    { name: 'weekly_goal', type: 'REAL' }
+  ];
+
+  for (const col of newCols2) {
+    try {
+      await db.execute(`ALTER TABLE profiles ADD COLUMN ${col.name} ${col.type}`);
+    } catch (e) {
+      // Column likely exists
+    }
+  }
   // Seed default profile
   const profiles = await db.execute("SELECT * FROM profiles LIMIT 1");
   if (profiles.rows.length === 0) {

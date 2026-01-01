@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 import { ProfileMenu } from '@/components/ProfileMenu';
 import { DateNavigator } from '@/components/DateNavigator';
 import { Dashboard } from '@/components/Dashboard';
-import { SettingsIcon, ChartIcon } from '@/components/ui/Icons';
+import { SettingsIcon, ChartIcon, ScaleIcon } from '@/components/ui/Icons';
 import styles from './page.module.css';
 import Link from 'next/link';
 
@@ -48,6 +48,9 @@ export default async function Home({ searchParams }: PageProps) {
             activeId={activeProfileId}
           />
           <div className={styles.topActions}>
+            <Link href="/weight" className={styles.iconBtn} aria-label="Weight">
+              <ScaleIcon size={20} />
+            </Link>
             <Link href="/ideas" className={styles.iconBtn} aria-label="Ideas">
               <span style={{ fontSize: '1.25rem' }}>💡</span>
             </Link>
