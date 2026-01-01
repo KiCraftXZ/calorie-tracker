@@ -18,6 +18,7 @@ export interface Profile {
     name: string;
     daily_goal: number;
     avatar_color: string;
+    display_order: number;
 }
 
 async function getProfileId() {
@@ -28,7 +29,7 @@ async function getProfileId() {
 
 export async function getProfiles() {
     await ensureDbInitialized();
-    const result = await db.execute("SELECT * FROM profiles ORDER BY id");
+    const result = await db.execute("SELECT * FROM profiles ORDER BY display_order ASC, id ASC");
     return result.rows as unknown as Profile[];
 }
 
@@ -38,9 +39,14 @@ export async function createProfile(name: string) {
     const colors = ['#4F5D48', '#8A9A81', '#C07A55', '#E6C288', '#AAB0A6', '#5C6157', '#8C7662'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
+    // Get max display_order
+    const maxOrderResult = await db.execute("SELECT MAX(display_order) as max_order FROM profiles");
+    const maxOrder = maxOrderResult.rows[0]?.max_order as number || 0;
+    const nextOrder = maxOrder + 1;
+
     await db.execute({
-        sql: "INSERT INTO profiles (name, daily_goal, avatar_color) VALUES (?, 2000, ?)",
-        args: [name, randomColor]
+        sql: "INSERT INTO profiles (name, daily_goal, avatar_color, display_order) VALUES (?, 2000, ?, ?)",
+        args: [name, randomColor, nextOrder]
     });
     revalidatePath('/');
 }
@@ -54,6 +60,55 @@ export async function renameProfile(newName: string) {
         sql: "UPDATE profiles SET name = ? WHERE id = ?",
         args: [newName, profileId]
     });
+    revalidatePath('/');
+}
+
+export async function moveProfile(id: number, direction: 'up' | 'down') {
+    await ensureDbInitialized();
+    const profiles = await getProfiles(); // Already sorted by display_order
+    const index = profiles.findIndex(p => p.id === id);
+    if (index === -1) return;
+
+    if (direction === 'up' && index > 0) {
+        const currentProfile = profiles[index];
+        const prevProfile = profiles[index - 1];
+
+        // Swap display_order
+        // If display_order is same (e.g. 0 due to migration), force a distinction
+        // Actually, since we want to swap positions, we can just swap the display_order values.
+        // But if values are equal, swapping does nothing.
+        // So we should enforce unique display_order or just swap their entire order values.
+        // Better strategy: Ensure they have valid orders first? 
+        // Migration ensures they are id based if 0. So they should be distinct initially.
+
+        const tempOrder = currentProfile.display_order;
+        const otherOrder = prevProfile.display_order;
+
+        await db.execute({
+            sql: "UPDATE profiles SET display_order = ? WHERE id = ?",
+            args: [otherOrder, currentProfile.id]
+        });
+        await db.execute({
+            sql: "UPDATE profiles SET display_order = ? WHERE id = ?",
+            args: [tempOrder, prevProfile.id]
+        });
+    } else if (direction === 'down' && index < profiles.length - 1) {
+        const currentProfile = profiles[index];
+        const nextProfile = profiles[index + 1];
+
+        const tempOrder = currentProfile.display_order;
+        const otherOrder = nextProfile.display_order;
+
+        await db.execute({
+            sql: "UPDATE profiles SET display_order = ? WHERE id = ?",
+            args: [otherOrder, currentProfile.id]
+        });
+        await db.execute({
+            sql: "UPDATE profiles SET display_order = ? WHERE id = ?",
+            args: [tempOrder, nextProfile.id]
+        });
+    }
+
     revalidatePath('/');
 }
 

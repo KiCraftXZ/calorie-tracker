@@ -4,6 +4,7 @@ import {
   getProfiles,
   createProfile,
   renameProfile,
+  moveProfile,
 } from './actions';
 import { cookies } from 'next/headers';
 import { ProfileMenu } from '@/components/ProfileMenu';
@@ -43,6 +44,7 @@ export default async function Home({ searchParams }: PageProps) {
             profiles={profiles}
             createProfile={createProfile}
             renameProfile={renameProfile}
+            moveProfile={moveProfile}
             activeId={activeProfileId}
           />
           <div className={styles.topActions}>

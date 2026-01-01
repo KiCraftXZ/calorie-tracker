@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { PlusIcon, CheckIcon, SettingsIcon, UserIcon } from './ui/Icons';
+import { PlusIcon, CheckIcon, SettingsIcon, UserIcon, ChevronDown, ChevronUp } from './ui/Icons';
 import styles from './ProfileMenu.module.css';
 
 interface Profile {
@@ -16,10 +16,11 @@ interface Props {
     profiles: Profile[];
     createProfile: (name: string) => Promise<void>;
     renameProfile: (newName: string) => Promise<void>; // Prop needed
+    moveProfile: (id: number, direction: 'up' | 'down') => Promise<void>;
     activeId: number;
 }
 
-export function ProfileMenu({ profiles, createProfile, renameProfile, activeId }: Props) {
+export function ProfileMenu({ profiles, createProfile, renameProfile, moveProfile, activeId }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [mode, setMode] = useState<'list' | 'add' | 'rename'>('list');
     const router = useRouter();
@@ -87,8 +88,28 @@ export function ProfileMenu({ profiles, createProfile, renameProfile, activeId }
                             </div>
 
                             <div className={styles.list}>
-                                {profiles.map(p => (
+                                {profiles.map((p, index) => (
                                     <div key={p.id} className={styles.itemWrapper}>
+                                        <div className={styles.reorderCol}>
+                                            {index > 0 ? (
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); moveProfile(p.id, 'up'); }}
+                                                    className={styles.reorderBtn}
+                                                    title="Move Up"
+                                                >
+                                                    <ChevronUp size={12} />
+                                                </button>
+                                            ) : <div style={{ height: 16 }} />}
+                                            {index < profiles.length - 1 ? (
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); moveProfile(p.id, 'down'); }}
+                                                    className={styles.reorderBtn}
+                                                    title="Move Down"
+                                                >
+                                                    <ChevronDown size={12} />
+                                                </button>
+                                            ) : <div style={{ height: 16 }} />}
+                                        </div>
                                         <button
                                             className={`${styles.item} ${p.id === activeId ? styles.active : ''}`}
                                             onClick={() => handleSwitch(p.id)}

@@ -25,7 +25,8 @@ export async function ensureDbInitialized() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       daily_goal INTEGER DEFAULT 2000,
-      avatar_color TEXT DEFAULT '#7cb342'
+      avatar_color TEXT DEFAULT '#7cb342',
+      display_order INTEGER DEFAULT 0
     )
   `);
 
@@ -45,6 +46,33 @@ export async function ensureDbInitialized() {
     await db.execute("ALTER TABLE entries ADD COLUMN profile_id INTEGER DEFAULT 1");
   } catch (e) {
     // Column likely exists
+  }
+
+  // Migration: Add display_order to profiles
+  try {
+    await db.execute("ALTER TABLE profiles ADD COLUMN display_order INTEGER DEFAULT 0");
+    // Initialize display_order for existing profiles if they are 0 (which is default)
+    // We can just update all to be equal to ID if they are all 0.
+    // However, if we simply set it to ID, that's a good initial sort.
+    await db.execute("UPDATE profiles SET display_order = id WHERE display_order = 0");
+  } catch (e) {
+    // Column likely exists
+  }
+
+  // Migration: Add user details fields
+  const newCols = [
+    { name: 'age', type: 'INTEGER' },
+    { name: 'lifestyle', type: 'TEXT' },
+    { name: 'current_weight', type: 'INTEGER' },
+    { name: 'target_weight', type: 'INTEGER' }
+  ];
+
+  for (const col of newCols) {
+    try {
+      await db.execute(`ALTER TABLE profiles ADD COLUMN ${col.name} ${col.type}`);
+    } catch (e) {
+      // Column likely exists
+    }
   }
 
   // Seed default profile

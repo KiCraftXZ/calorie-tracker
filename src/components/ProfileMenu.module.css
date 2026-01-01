@@ -204,3 +204,27 @@
     cursor: pointer;
     align-self: center;
 }
+
+.reorderCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.reorderBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    color: var(--text-muted);
+    border-radius: 4px;
+    display: flex;
+    transition: all 0.1s;
+}
+
+.reorderBtn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}

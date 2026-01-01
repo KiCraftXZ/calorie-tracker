@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Calorie - Track Your Nutrition",
   description: "A beautiful and minimalistic calorie tracking app",
   icons: {
-    icon: '/icon?v=4',
+    icon: '/icon?v=5',
   },
 };
 
